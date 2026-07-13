@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+:root {
+  /* Color tokens — light, professional, editorial-engineer palette */
+  --background: #fafaf8;
+  --surface: #ffffff;
+  --ink: #15171b;
+  --ink-soft: #2a2d33;
+  --muted: #5b6168;
+  --muted-soft: #8a9098;
+  --border: #e4e2dc;
+  --border-strong: #d2cfc7;
+  --accent: #2a5c45;
+  --accent-strong: #1e4633;
+  --accent-soft: #e8efe9;
+  --accent-tint: #f1f5f2;
+
+  --font-display: var(--font-fraunces);
+  --font-body: var(--font-inter);
+  --font-mono: var(--font-jetbrains);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted: var(--muted);
+  --color-muted-soft: var(--muted-soft);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-tint: var(--accent-tint);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Offset for smooth scroll — prevents sections landing behind fixed headers.
+   Desktop: 24px breathing room (no fixed top bar, NavRail is on the left).
+   Mobile:  80px to clear the fixed top bar (64px) + breathing room. */
+section {
+  scroll-margin-top: 24px;
+}
+
+@media (max-width: 1023px) {
+  section {
+    scroll-margin-top: 80px;
+  }
+}
+
+html,
+body {
+  background: var(--background);
+  color: var(--ink);
+  font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+/* Thin, quiet scrollbar that matches the editorial tone */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-soft);
+}
+
+/* Visible keyboard focus ring everywhere — accessibility floor */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.font-display {
+  font-family: var(--font-display), serif;
+}
+
+.font-mono {
+  font-family: var(--font-mono), monospace;
+}
+
+/* Reveal-on-scroll utility, driven by IntersectionObserver adding .is-visible.
+   We only animate transform (subtle lift), NOT opacity — opacity:0 was causing
+   sections to appear blank when navigating via the nav rail. */
+.reveal {
+  opacity: 1;
+  transform: translateY(20px);
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Animated underline for nav links */
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 1.5px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.link-underline:hover::after,
+.link-underline.is-active::after {
+  transform: scaleX(1);
+}
